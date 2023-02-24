@@ -3,7 +3,10 @@ use stylist::yew::{styled_component, Global};
 use yew::prelude::*;
 
 use crate::app::gelato::generateResponsiveStyles;
+mod contexts;
 mod gelato;
+
+use contexts::{use_theme, ThemeKind, ThemeProvider};
 
 #[derive(Debug, Properties, PartialEq)]
 pub struct Props {
@@ -12,8 +15,10 @@ pub struct Props {
 
 #[styled_component]
 pub fn Inside(props: &Props) -> Html {
+    let theme = use_theme();
     // generateResponsiveStyles(props);
-    info!("Hello {:?}", props);
+    info!("Props {:?}", props);
+    info!("Theme {:?}", theme.kind());
 
     html! {
         <div class={css!(r#"
