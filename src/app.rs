@@ -1,8 +1,20 @@
+use log::info;
 use stylist::yew::{styled_component, Global};
 use yew::prelude::*;
 
+use crate::app::gelato::generateResponsiveStyles;
+mod gelato;
+
+#[derive(Debug, Properties, PartialEq)]
+pub struct Props {
+    pub margin: String,
+}
+
 #[styled_component]
-pub fn Inside() -> Html {
+pub fn Inside(props: &Props) -> Html {
+    // generateResponsiveStyles(props);
+    info!("Hello {:?}", props);
+
     html! {
         <div class={css!(r#"
             width: 200px;
@@ -52,7 +64,7 @@ pub fn App() -> Html {
                 background-color: white;
             "#)} id="yew-sample-content">
                 {"The quick brown fox jumps over the lazy dog"}
-                <Inside />
+                <Inside margin="sm" />
             </div>
         </>
     }
