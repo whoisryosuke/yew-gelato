@@ -2,7 +2,7 @@ use log::info;
 use std::collections::HashMap;
 
 use super::contexts::Theme;
-use stylist::Style;
+use stylist::{style, Style};
 
 pub trait ResponsiveStyleProps {}
 
@@ -27,7 +27,7 @@ struct ResponsiveStyleConfig {
 //     return generateResponsiveStyles;
 // }
 
-pub(crate) fn generateResponsiveStyles(theme: &Theme, margin_key: usize) -> String {
+pub(crate) fn generateResponsiveStyles(theme: &Theme, margin_key: usize) -> Style {
     // let style_str = r#"
     //     background-color: red;
 
@@ -53,7 +53,15 @@ pub(crate) fn generateResponsiveStyles(theme: &Theme, margin_key: usize) -> Stri
         0
     };
 
-    format!("margin: {}", margin)
+    let second_class = style!(
+        r#"
+            margin-top: ${margin}px;
+        "#,
+        margin = margin
+    )
+    .expect("Failed to mount style");
+
+    second_class
 }
 
 // type StringMap = HashMap<String, String>;

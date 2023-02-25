@@ -19,7 +19,7 @@ pub struct Props {
 #[styled_component]
 pub fn Inside(props: &Props) -> Html {
     let theme = use_theme();
-    generateResponsiveStyles(theme.kind().current(), props.margin);
+
     // info!("Props {:?}", props);
     // info!("Theme {:?}", theme.kind());
     // info!("Theme Styles {:?}", theme.kind().current());
@@ -38,15 +38,10 @@ pub fn Inside(props: &Props) -> Html {
     )
     .expect("Failed to mount style");
 
-    let second_class = style!(
-        r#"
-            margin-top: 20px;
-        "#
-    )
-    .expect("Failed to mount style");
+    let margin = generateResponsiveStyles(theme.kind().current(), props.margin);
 
     html! {
-        <div class={format!("{} {}", first_class.get_class_name(), second_class.get_class_name())}>
+        <div class={format!("{} {}", first_class.get_class_name(), margin.get_class_name())}>
             {"The quick brown fox jumps over the lazy dog"}
         </div>
     }
@@ -85,7 +80,7 @@ pub fn App() -> Html {
                 background-color: white;
             "#)} id="yew-sample-content">
                 {"The quick brown fox jumps over the lazy dog"}
-                <Inside margin={0} />
+                <Inside margin={4} />
             </div>
         </>
     }
