@@ -16,9 +16,10 @@ pub struct Props {
 #[styled_component]
 pub fn Inside(props: &Props) -> Html {
     let theme = use_theme();
-    // generateResponsiveStyles(props);
-    info!("Props {:?}", props);
-    info!("Theme {:?}", theme.kind());
+    generateResponsiveStyles(theme.kind().current(), props);
+    // info!("Props {:?}", props);
+    // info!("Theme {:?}", theme.kind());
+    // info!("Theme Styles {:?}", theme.kind().current());
 
     html! {
         <div class={css!(r#"
@@ -75,7 +76,11 @@ pub fn App() -> Html {
     }
 }
 
-fn main() {
-    // console_log::init_with_level(Level::Trace).expect("Failed to initialise Log!");
-    yew::Renderer::<App>::new().render();
+#[styled_component]
+pub fn Root() -> Html {
+    html! {
+        <ThemeProvider>
+            <App />
+        </ThemeProvider>
+    }
 }
