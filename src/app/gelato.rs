@@ -27,7 +27,7 @@ struct ResponsiveStyleConfig {
 //     return generateResponsiveStyles;
 // }
 
-pub(crate) fn generateResponsiveStyles<Props: std::fmt::Debug>(theme: &Theme, props: Props) {
+pub(crate) fn generateResponsiveStyles(theme: &Theme, margin_key: usize) -> String {
     // let style_str = r#"
     //     background-color: red;
 
@@ -41,11 +41,19 @@ pub(crate) fn generateResponsiveStyles<Props: std::fmt::Debug>(theme: &Theme, pr
 
     // style.get_class_name()
 
-    info!("Props {:?}", props);
+    info!("Props {:?}", margin_key);
     info!("Theme in fn {:?}", theme);
     // for value in props.iter() {
     //     dbg!(value);
     // }
+
+    let margin = if theme.space.len() >= margin_key {
+        theme.space[margin_key]
+    } else {
+        0
+    };
+
+    format!("margin: {}", margin)
 }
 
 // type StringMap = HashMap<String, String>;

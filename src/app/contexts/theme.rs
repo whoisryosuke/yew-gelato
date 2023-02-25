@@ -19,12 +19,14 @@ impl ThemeKind {
             font_color: "black".to_string(),
             background_color: "rgb(237, 244, 255)".to_string(),
             paper_color: "white".to_string(),
+            space: vec![0, 4, 8, 16, 32, 64, 128, 256, 512],
         });
 
         static DARK_THEME: Lazy<Theme> = Lazy::new(|| Theme {
             font_color: "white".to_string(),
             background_color: "black".to_string(),
             paper_color: "rgb(50, 50, 50)".to_string(),
+            space: vec![0, 4, 8, 16, 32, 64, 128, 256, 512],
         });
 
         match self {
@@ -40,6 +42,7 @@ pub(crate) struct Theme {
     pub background_color: String,
 
     pub paper_color: String,
+    pub space: Vec<i32>,
 }
 
 #[derive(Debug, Clone)]

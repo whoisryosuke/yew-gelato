@@ -1,5 +1,8 @@
 use log::info;
-use stylist::yew::{styled_component, Global};
+use stylist::{
+    style,
+    yew::{styled_component, Global},
+};
 use yew::prelude::*;
 
 use crate::app::gelato::generateResponsiveStyles;
@@ -10,19 +13,19 @@ use contexts::{use_theme, ThemeKind, ThemeProvider};
 
 #[derive(Debug, Properties, PartialEq)]
 pub struct Props {
-    pub margin: String,
+    pub margin: usize,
 }
 
 #[styled_component]
 pub fn Inside(props: &Props) -> Html {
     let theme = use_theme();
-    generateResponsiveStyles(theme.kind().current(), props);
+    generateResponsiveStyles(theme.kind().current(), props.margin);
     // info!("Props {:?}", props);
     // info!("Theme {:?}", theme.kind());
     // info!("Theme Styles {:?}", theme.kind().current());
 
-    html! {
-        <div class={css!(r#"
+    let first_class = style!(
+        r#"
             width: 200px;
             height: 200px;
             border-radius: 5px;
@@ -31,7 +34,19 @@ pub fn Inside(props: &Props) -> Html {
             box-sizing: border-box;
             box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.7);
             color: white;
-        "#)}>
+        "#
+    )
+    .expect("Failed to mount style");
+
+    let second_class = style!(
+        r#"
+            margin-top: 20px;
+        "#
+    )
+    .expect("Failed to mount style");
+
+    html! {
+        <div class={format!("{} {}", first_class.get_class_name(), second_class.get_class_name())}>
             {"The quick brown fox jumps over the lazy dog"}
         </div>
     }
@@ -70,7 +85,7 @@ pub fn App() -> Html {
                 background-color: white;
             "#)} id="yew-sample-content">
                 {"The quick brown fox jumps over the lazy dog"}
-                <Inside margin="sm" />
+                <Inside margin={0} />
             </div>
         </>
     }
