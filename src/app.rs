@@ -5,7 +5,7 @@ use stylist::{
 };
 use yew::prelude::*;
 
-use crate::app::gelato::generateResponsiveStyles;
+use crate::app::gelato::{generateResponsiveStyles, generate_color_styles};
 mod contexts;
 mod gelato;
 
@@ -14,6 +14,7 @@ use contexts::{use_theme, ThemeKind, ThemeProvider};
 #[derive(Debug, Properties, PartialEq)]
 pub struct Props {
     pub margin: usize,
+    pub color: String,
 }
 
 #[styled_component]
@@ -39,9 +40,10 @@ pub fn Inside(props: &Props) -> Html {
     .expect("Failed to mount style");
 
     let margin = generateResponsiveStyles(theme.kind().current(), props.margin);
+    let color = generate_color_styles(theme.kind().current(), props.color);
 
     html! {
-        <div class={format!("{} {}", first_class.get_class_name(), margin.get_class_name())}>
+        <div class={format!("{} {} {}", first_class.get_class_name(), margin.get_class_name(), color.get_class_name())}>
             {"The quick brown fox jumps over the lazy dog"}
         </div>
     }
@@ -80,7 +82,7 @@ pub fn App() -> Html {
                 background-color: white;
             "#)} id="yew-sample-content">
                 {"The quick brown fox jumps over the lazy dog"}
-                <Inside margin={4} />
+                <Inside margin={4} color="text" />
             </div>
         </>
     }

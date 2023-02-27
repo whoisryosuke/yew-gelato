@@ -28,25 +28,6 @@ struct ResponsiveStyleConfig {
 // }
 
 pub(crate) fn generateResponsiveStyles(theme: &Theme, margin_key: usize) -> Style {
-    // let style_str = r#"
-    //     background-color: red;
-
-    //     .nested {
-    //         background-color: blue;
-    //         width: 100px
-    //     }
-    // "#;
-
-    // let style = Style::new(style_str).expect("Failed to create style");
-
-    // style.get_class_name()
-
-    info!("Props {:?}", margin_key);
-    info!("Theme in fn {:?}", theme);
-    // for value in props.iter() {
-    //     dbg!(value);
-    // }
-
     let margin = if theme.space.len() >= margin_key {
         theme.space[margin_key]
     } else {
@@ -62,6 +43,28 @@ pub(crate) fn generateResponsiveStyles(theme: &Theme, margin_key: usize) -> Styl
     .expect("Failed to mount style");
 
     second_class
+}
+
+pub(crate) fn generate_color_styles(theme: &Theme, color_key: String) -> Style {
+    let color = if theme.colors.contains_key(&color_key) {
+        theme
+            .colors
+            .get(&color_key)
+            .expect("Couldn't find key")
+            .clone()
+    } else {
+        "#000".to_string()
+    };
+
+    let style = style!(
+        r#"
+            color: ${color};
+        "#,
+        color = color
+    )
+    .expect("Failed to mount style");
+
+    style
 }
 
 // type StringMap = HashMap<String, String>;

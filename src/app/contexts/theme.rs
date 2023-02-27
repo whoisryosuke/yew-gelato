@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::ops::Deref;
 
 use once_cell::sync::Lazy;
@@ -20,6 +21,17 @@ impl ThemeKind {
             background_color: "rgb(237, 244, 255)".to_string(),
             paper_color: "white".to_string(),
             space: vec![0, 4, 8, 16, 32, 64, 128, 256, 512],
+            colors: Colors {
+                text: "#111212".to_string(),
+                background: "#fff".to_string(),
+                primary: "#005CDD".to_string(),
+                secondary: "#6D59F0".to_string(),
+                muted: "#f6f6f9".to_string(),
+                gray: "#D3D7DA".to_string(),
+                highlight: "hsla(205, 100%, 40%, 0.125)".to_string(),
+                white: "#FFF".to_string(),
+                black: "#111212".to_string(),
+            },
         });
 
         static DARK_THEME: Lazy<Theme> = Lazy::new(|| Theme {
@@ -27,6 +39,18 @@ impl ThemeKind {
             background_color: "black".to_string(),
             paper_color: "rgb(50, 50, 50)".to_string(),
             space: vec![0, 4, 8, 16, 32, 64, 128, 256, 512],
+            // colors: HashMap::new().insert(k, v)
+            colors: Colors {
+                text: "#f6f6f9".to_string(),
+                background: "#111212".to_string(),
+                primary: "#005CDD".to_string(),
+                secondary: "#6D59F0".to_string(),
+                muted: "#f6f6f9".to_string(),
+                gray: "#D3D7DA".to_string(),
+                highlight: "hsla(205, 100%, 40%, 0.125)".to_string(),
+                white: "#FFF".to_string(),
+                black: "#111212".to_string(),
+            },
         });
 
         match self {
@@ -43,6 +67,20 @@ pub(crate) struct Theme {
 
     pub paper_color: String,
     pub space: Vec<i32>,
+    pub colors: HashMap<String, String>,
+}
+
+#[derive(Debug, Clone)]
+pub(crate) struct Colors {
+    text: String,
+    background: String,
+    primary: String,
+    secondary: String,
+    muted: String,
+    gray: String,
+    highlight: String,
+    white: String,
+    black: String,
 }
 
 #[derive(Debug, Clone)]
