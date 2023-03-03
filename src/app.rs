@@ -39,13 +39,45 @@ pub fn Inside(props: &Props) -> Html {
     )
     .expect("Failed to mount style");
 
-    let margin = generateResponsiveStyles(theme.kind().current(), props.margin);
-    let color = generate_color_styles(theme.kind().current(), props.color);
+    // let margin = generateResponsiveStyles(theme.kind().current(), props.margin);
+    let color = generate_color_styles(theme.kind().current(), props.color.clone());
 
     html! {
-        <div class={format!("{} {} {}", first_class.get_class_name(), margin.get_class_name(), color.get_class_name())}>
+        <div class={format!("{} {}", first_class.get_class_name(), color.get_class_name())}>
             {"The quick brown fox jumps over the lazy dog"}
         </div>
+    }
+}
+
+#[styled_component]
+pub fn Button(props: &Props) -> Html {
+    let theme = use_theme();
+
+    // info!("Props {:?}", props);
+    // info!("Theme {:?}", theme.kind());
+    // info!("Theme Styles {:?}", theme.kind().current());
+
+    let first_class = style!(
+        r#"
+            width: 200px;
+            height: 100px;
+            border-radius: 5px;
+            background: #333;
+            padding: 15px;
+            box-sizing: border-box;
+            box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.7);
+            color: white;
+        "#
+    )
+    .expect("Failed to mount style");
+
+    // let margin = generateResponsiveStyles(theme.kind().current(), props.margin);
+    let color = generate_color_styles(theme.kind().current(), props.color.clone());
+
+    html! {
+        <button class={format!("{} {}", first_class.get_class_name(), color.get_class_name())}>
+            {"The quick brown fox jumps over the lazy dog"}
+        </button>
     }
 }
 
@@ -83,6 +115,10 @@ pub fn App() -> Html {
             "#)} id="yew-sample-content">
                 {"The quick brown fox jumps over the lazy dog"}
                 <Inside margin={4} color="text" />
+                <Inside margin={4} color="text" />
+                <Inside margin={4} color="primary" />
+                <Button margin={4} color="text" />
+                <Button margin={4} color="primary" />
             </div>
         </>
     }
