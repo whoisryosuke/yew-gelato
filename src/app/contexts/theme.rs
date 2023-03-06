@@ -36,6 +36,7 @@ impl ThemeKind {
                 paper_color: "white".to_string(),
                 space: vec![0, 4, 8, 16, 32, 64, 128, 256, 512],
                 colors,
+                media_queries: generate_media_queries(),
             }
         });
 
@@ -59,6 +60,7 @@ impl ThemeKind {
                 paper_color: "rgb(50, 50, 50)".to_string(),
                 space: vec![0, 4, 8, 16, 32, 64, 128, 256, 512],
                 colors,
+                media_queries: generate_media_queries(),
             }
         });
 
@@ -69,6 +71,46 @@ impl ThemeKind {
     }
 }
 
+const BREAKPOINTS: [&str; 5] = [
+    "320px",  // mobile
+    "768px",  // tablet
+    "992px",  // computer
+    "1200px", // desktop
+    "1920px", // widescreen
+];
+
+// fn generate_media_queries() -> MediaQueries {
+//     MediaQueries {
+//         mobile: format!("@media screen and (min-width: ${})", BREAKPOINTS[0]),
+//         tablet: format!("@media screen and (min-width: ${})", BREAKPOINTS[1]),
+//         computer: format!("@media screen and (min-width: ${})", BREAKPOINTS[2]),
+//         desktop: format!("@media screen and (min-width: ${})", BREAKPOINTS[3]),
+//         widescreen: format!("@media screen and (min-width: ${})", BREAKPOINTS[4]),
+//     }
+// }
+
+type MediaQueriesArray = [String; 5];
+
+// fn generate_media_queries() -> MediaQueriesArray {
+//     [
+//         format!("@media screen and (min-width: ${})", BREAKPOINTS[0]),
+//         format!("@media screen and (min-width: ${})", BREAKPOINTS[1]),
+//         format!("@media screen and (min-width: ${})", BREAKPOINTS[2]),
+//         format!("@media screen and (min-width: ${})", BREAKPOINTS[3]),
+//         format!("@media screen and (min-width: ${})", BREAKPOINTS[4]),
+//     ]
+// }
+
+fn generate_media_queries() -> MediaQueriesArray {
+    [
+        BREAKPOINTS[0].to_string(),
+        BREAKPOINTS[1].to_string(),
+        BREAKPOINTS[2].to_string(),
+        BREAKPOINTS[3].to_string(),
+        BREAKPOINTS[4].to_string(),
+    ]
+}
+
 #[derive(Debug, Clone)]
 pub(crate) struct Theme {
     pub font_color: String,
@@ -77,6 +119,16 @@ pub(crate) struct Theme {
     pub paper_color: String,
     pub space: Vec<i32>,
     pub colors: HashMap<String, String>,
+    pub media_queries: MediaQueriesArray,
+}
+
+#[derive(Debug, Clone)]
+pub(crate) struct MediaQueries {
+    mobile: String,
+    tablet: String,
+    computer: String,
+    desktop: String,
+    widescreen: String,
 }
 
 #[derive(Debug, Clone)]

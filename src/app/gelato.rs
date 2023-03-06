@@ -4,45 +4,37 @@ use std::collections::HashMap;
 use super::contexts::Theme;
 use stylist::{style, Style};
 
-pub trait ResponsiveStyleProps {}
+pub(crate) fn generateResponsiveStyles(theme: &Theme, values: Vec<usize>) -> Style {
+    let styles: Vec<Style> = Vec::new();
 
-struct MediaQueries {}
+    for (index, key) in values.iter().enumerate() {
+        let margin = if theme.space.len() >= *key {
+            theme.space[*key]
+        } else {
+            0
+        };
 
-// Props can be an array of strings (e.g.  flexDirection: ["row", "column"],)
-// or a HashMap that represents "look up key" + CSS value
-enum ResponsiveProp {
-    Strings(Vec<String>),
-    Keys(HashMap<String, String>),
-}
+        let css_property = "margin-top: ${margin}px;";
 
-struct ResponsiveStyleConfig {
-    conditions: MediaQueries,
-    default_condition: String,
-    properties: HashMap<String, ResponsiveProp>,
-}
-
-// fn createResponsiveStyleProps(config: ResponsiveStyleConfig) -> Fn {
-//     // Return a function the user can use in their component
-//     // Function should return CSS class for the appropriate responsive styles
-//     return generateResponsiveStyles;
-// }
-
-pub(crate) fn generateResponsiveStyles(theme: &Theme, margin_key: usize) -> Style {
-    let margin = if theme.space.len() >= margin_key {
-        theme.space[margin_key]
-    } else {
-        0
-    };
-
-    let second_class = style!(
-        r#"
-            margin-top: ${margin}px;
+        let breakpoint_style = style!(
+            r#"
+        @media screen and (min-width: ${breakpoint}) {
+            ${css_property}
+        }
         "#,
-        margin = margin
-    )
-    .expect("Failed to mount style");
+            breakpoint = theme.media_queries[index],
+            css_property = css_property,
+        )
+        .expect("");
 
-    second_class
+        styles.push(breakpoint_style);
+    }
+
+    let combined_styles = styles.join("\n");
+
+    let style = style!(combined_styles).expect("Failed to mount style");
+
+    style
 }
 
 pub(crate) fn generate_color_styles(theme: &Theme, color_key: String) -> Style {
