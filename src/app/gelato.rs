@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, fs};
 
 use stylist::Style;
 
@@ -39,6 +39,11 @@ pub fn generateResponsiveStyles<Props: std::fmt::Debug>(props: Props) {
 
     // style.get_class_name()
 
+    let file_path = String::from("README.md");
+    let contents =
+        fs::read_to_string(file_path).expect("Couldn't read the file from the path provided");
+
+    dbg!(contents);
     dbg!(props);
     // for value in props.iter() {
     //     dbg!(value);

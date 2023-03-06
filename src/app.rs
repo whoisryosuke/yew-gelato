@@ -12,8 +12,8 @@ pub struct Props {
 
 #[styled_component]
 pub fn Inside(props: &Props) -> Html {
-    // generateResponsiveStyles(props);
-    info!("Hello {:?}", props);
+    generateResponsiveStyles(props);
+    // info!("Hello {:?}", props);
 
     html! {
         <div class={css!(r#"
