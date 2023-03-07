@@ -12,6 +12,7 @@ struct MediaQueries {}
 // or a HashMap that represents "look up key" + CSS value
 enum ResponsiveProp {
     Strings(Vec<String>),
+    Numbers(Vec<f32>),
     Keys(HashMap<String, String>),
 }
 
@@ -21,11 +22,38 @@ struct ResponsiveStyleConfig {
     properties: HashMap<String, ResponsiveProp>,
 }
 
-// fn createResponsiveStyleProps(config: ResponsiveStyleConfig) -> Fn {
-//     // Return a function the user can use in their component
-//     // Function should return CSS class for the appropriate responsive styles
-//     return generateResponsiveStyles;
-// }
+fn createResponsiveStyleProps(
+    config: ResponsiveStyleConfig,
+) -> Box<dyn Fn(HashMap<String, String>) -> String> {
+    // TODO: Ideally generate CSS here. Save CSS classnames mapped to config properties to access later.
+
+    // We create a Box to contain the dynamic closure
+    // (since the size of closure is unknown before compile)
+    Box::new(move |props| {
+        for (key, prop) in props {
+            // Check if it exists in config
+            // TODO: Don't use config here -- use struct with generated CSS
+            if config.properties.contains_key(&key) {
+                let theme_value = config
+                    .properties
+                    .get(&key)
+                    .expect("Theme property not found in config.");
+
+                // What type of prop is this? Then find the prop and generate the  CSS
+                match theme_value {
+                    // An array of string (e.g. `['100px', '200px', '300px']`)
+                    ResponsiveProp::Strings(strings) => todo!(),
+                    // A hashmap (e.g. `{ blue: 'blue', red: 'red' }`)
+                    ResponsiveProp::Keys(map) => todo!(),
+                    // An array of string (e.g. `[1, 2, 3]`)
+                    ResponsiveProp::Numbers(_) => todo!(),
+                }
+            };
+        }
+
+        "".to_string()
+    })
+}
 
 pub(crate) fn generateResponsiveStyles(theme: &Theme, margin_key: usize) -> Style {
     let margin = if theme.space.len() >= margin_key {
