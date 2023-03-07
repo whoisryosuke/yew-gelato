@@ -13,7 +13,7 @@ use contexts::{use_theme, ThemeKind, ThemeProvider};
 
 #[derive(Debug, Properties, PartialEq)]
 pub struct Props {
-    pub margin: usize,
+    pub margin: Vec<usize>,
     pub color: String,
 }
 
@@ -41,9 +41,10 @@ pub fn Inside(props: &Props) -> Html {
 
     // let margin = generateResponsiveStyles(theme.kind().current(), props.margin);
     let color = generate_color_styles(theme.kind().current(), props.color.clone());
+    let margin = generateResponsiveStyles(theme.kind().current(), props.margin.clone());
 
     html! {
-        <div class={format!("{} {}", first_class.get_class_name(), color.get_class_name())}>
+        <div class={format!("{} {} {}", first_class.get_class_name(), color.get_class_name(), margin)}>
             {"The quick brown fox jumps over the lazy dog"}
         </div>
     }
@@ -114,11 +115,11 @@ pub fn App() -> Html {
                 background-color: white;
             "#)} id="yew-sample-content">
                 {"The quick brown fox jumps over the lazy dog"}
-                <Inside margin={4} color="text" />
-                <Inside margin={4} color="text" />
-                <Inside margin={4} color="primary" />
-                <Button margin={4} color="text" />
-                <Button margin={4} color="primary" />
+                <Inside margin={vec!(2,3)} color="text" />
+                <Inside margin={vec!(2,3)} color="text" />
+                <Inside margin={vec!(2,3)} color="primary" />
+                <Button margin={vec!(2,3)} color="text" />
+                <Button margin={vec!(2,3)} color="primary" />
             </div>
         </>
     }

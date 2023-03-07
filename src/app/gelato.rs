@@ -4,40 +4,36 @@ use std::collections::HashMap;
 use super::contexts::Theme;
 use stylist::{style, yew::use_media_query, Style};
 
-pub(crate) fn generateResponsiveStyles(theme: &Theme, values: Vec<usize>) -> Style {
-    let styles: Vec<&str> = Vec::new();
+pub(crate) fn generateResponsiveStyles(theme: &Theme, values: Vec<usize>) -> String {
+    let mut styles: Vec<String> = Vec::new();
 
     for (index, key) in values.iter().enumerate() {
-        let media_query_string = format!("(max-width: {})", theme.media_queries[index]);
         // Check if we even need to print the style based on current breakpoint1
-        let breakpoint_visible = use_media_query(&media_query_string);
+        let margin = if theme.space.len() >= *key {
+            theme.space[*key]
+        } else {
+            0
+        };
 
-        if breakpoint_visible {
-            let margin = if theme.space.len() >= *key {
-                theme.space[*key]
-            } else {
-                0
-            };
+        let css_property = "margin-top: ${margin}px;";
 
-            let css_property = "margin-top: ${margin}px;";
+        let css_property = style!(
+            r#"
+            @media screen and (min-width: ${breakpoint}) {
+                margin: ${margin}px;
+            }
+        "#,
+            margin = margin,
+            breakpoint = theme.media_queries[index]
+        )
+        .expect("");
 
-            let css_property = style!(
-                r#"
-                margin-top: ${margin}px;
-            "#,
-                margin = margin,
-            )
-            .expect("");
-
-            styles.push(css_property.get_class_name());
-        }
+        styles.push(css_property.get_class_name().to_string());
     }
 
     let combined_styles = styles.join(" ");
 
-    let style = style!(combined_styles).expect("Failed to mount style");
-
-    style
+    combined_styles
 }
 
 pub(crate) fn generate_color_styles(theme: &Theme, color_key: String) -> Style {
