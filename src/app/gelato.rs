@@ -27,6 +27,28 @@ fn createResponsiveStyleProps(
 ) -> Box<dyn Fn(HashMap<String, String>) -> String> {
     // TODO: Ideally generate CSS here. Save CSS classnames mapped to config properties to access later.
 
+    for (key, props) in config.properties {
+        // What type of prop is this? Then find the prop and generate the  CSS
+        match props {
+            // An array of string (e.g. `['100px', '200px', '300px']`)
+            ResponsiveProp::Strings(strings) => {
+                strings.iter().for_each(|prop| {
+                    let style = style!(
+                        r#"
+                            ${key}: ${prop};
+                        "#,
+                        key = key,
+                        prop = prop
+                    );
+                });
+            }
+            // A hashmap (e.g. `{ blue: 'blue', red: 'red' }`)
+            ResponsiveProp::Keys(map) => todo!(),
+            // An array of string (e.g. `[1, 2, 3]`)
+            ResponsiveProp::Numbers(_) => todo!(),
+        }
+    }
+
     // We create a Box to contain the dynamic closure
     // (since the size of closure is unknown before compile)
     Box::new(move |props| {
