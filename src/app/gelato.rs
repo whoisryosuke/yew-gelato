@@ -2,35 +2,38 @@ use log::info;
 use std::collections::HashMap;
 
 use super::contexts::Theme;
-use stylist::{style, Style};
+use stylist::{style, yew::use_media_query, Style};
 
 pub(crate) fn generateResponsiveStyles(theme: &Theme, values: Vec<usize>) -> Style {
-    let styles: Vec<Style> = Vec::new();
+    let styles: Vec<&str> = Vec::new();
 
     for (index, key) in values.iter().enumerate() {
-        let margin = if theme.space.len() >= *key {
-            theme.space[*key]
-        } else {
-            0
-        };
+        let media_query_string = format!("(max-width: {})", theme.media_queries[index]);
+        // Check if we even need to print the style based on current breakpoint1
+        let breakpoint_visible = use_media_query(&media_query_string);
 
-        let css_property = "margin-top: ${margin}px;";
+        if breakpoint_visible {
+            let margin = if theme.space.len() >= *key {
+                theme.space[*key]
+            } else {
+                0
+            };
 
-        let breakpoint_style = style!(
-            r#"
-        @media screen and (min-width: ${breakpoint}) {
-            ${css_property}
+            let css_property = "margin-top: ${margin}px;";
+
+            let css_property = style!(
+                r#"
+                margin-top: ${margin}px;
+            "#,
+                margin = margin,
+            )
+            .expect("");
+
+            styles.push(css_property.get_class_name());
         }
-        "#,
-            breakpoint = theme.media_queries[index],
-            css_property = css_property,
-        )
-        .expect("");
-
-        styles.push(breakpoint_style);
     }
 
-    let combined_styles = styles.join("\n");
+    let combined_styles = styles.join(" ");
 
     let style = style!(combined_styles).expect("Failed to mount style");
 
