@@ -4,15 +4,16 @@ use std::collections::HashMap;
 use super::contexts::Theme;
 use stylist::{style, yew::use_media_query, Style};
 
-pub(crate) fn generateResponsiveStyles(theme: &Theme, values: Vec<usize>) -> String {
+pub(crate) fn generateResponsiveStyles(theme: &Theme, values: Vec<i32>) -> String {
     let mut styles: Vec<String> = Vec::new();
 
-    for (index, key) in values.iter().enumerate() {
-        // Check if we even need to print the style based on current breakpoint1
-        let margin = if theme.space.len() >= *key {
-            theme.space[*key]
+    for (index, prop_value) in values.iter().enumerate() {
+        let key = *prop_value as usize;
+        // Check if we even need to print the style based on current breakpoint
+        let margin = if theme.space.len() > key {
+            theme.space[key]
         } else {
-            0
+            prop_value.clone()
         };
 
         let css_property = style!(
