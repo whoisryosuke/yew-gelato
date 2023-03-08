@@ -15,8 +15,6 @@ pub(crate) fn generateResponsiveStyles(theme: &Theme, values: Vec<usize>) -> Str
             0
         };
 
-        let css_property = "margin-top: ${margin}px;";
-
         let css_property = style!(
             r#"
             @media screen and (min-width: ${breakpoint}) {
