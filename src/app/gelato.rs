@@ -24,10 +24,12 @@ pub(crate) fn generateResponsiveStyles(theme: &Theme, values: Vec<i32>) -> Strin
         "#,
             margin = margin,
             breakpoint = theme.media_queries[index]
-        )
-        .expect("");
+        );
 
-        styles.push(css_property.get_class_name().to_string());
+        match css_property {
+            Ok(css_style) => styles.push(css_style.get_class_name().to_string()),
+            Err(_) => info!("Couldn't process CSS. Maybe check if prop is correct format."),
+        }
     }
 
     let combined_styles = styles.join(" ");
